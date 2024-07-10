@@ -1,0 +1,6 @@
+__pycache__/
+aivision_cam.egg-info/
+*.pt
+bin/
+obj/
+*.data
