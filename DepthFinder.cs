@@ -87,7 +87,6 @@ class DepthFinder
                 }
 
                 PyTuple pybbox = PyTuple.AsTuple(result.bbox);
-                Console.WriteLine(pybbox.GetItem(0).GetPythonType());
                 BoundingBox bbox = new BoundingBox(pybbox.GetItem(0).As<int>(), pybbox.GetItem(1).As<int>(),
                         pybbox.GetItem(2).As<int>(), pybbox.GetItem(3).As<int>());
 
@@ -107,10 +106,10 @@ class DepthFinder
 
     private void InitPython()
     {
+        // Change Python library path if needed
         Runtime.PythonDLL = "/usr/lib/x86_64-linux-gnu/libpython3.10.so";
         PythonEngine.Initialize();
         GIL = Py.GIL();
-        Console.WriteLine("Initializing");
     }
 
     public void Terminate()
@@ -120,7 +119,6 @@ class DepthFinder
         } catch (PythonException e) {
             Console.WriteLine("Error in Terminate: {0}", e.Message);
         }
-        Console.WriteLine("Terminating");
         GIL.Dispose();
         AppContext.SetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", true);
         PythonEngine.Shutdown();
@@ -131,7 +129,7 @@ class DepthFinder
 
     private void InitObject()
     {
-        DepthFinderModule = Py.Import("aivision_cam.depth_finder");
+        DepthFinderModule = Py.Import("aifinder.depth_finder");
         try {
             DepthFinderInstance = DepthFinderModule.DepthFinder(Width, Height, Fps, Weights);
         } catch (PythonException e) {
@@ -170,7 +168,7 @@ class DepthFinder
                 if (PyString.IsStringType(className)) {
                     classesNamesList.Add(className.ToString()!);
                 } else {
-                    classesNamesList.Add("");
+                    classesNamesList.Add(string.Empty);
                 }
             }
         } catch (PythonException e) {
@@ -260,6 +258,4 @@ class DepthFinder
     {
         return GetColorOfBox(new BoundingBox(x0, y0, x1, y1));
     }
-
-    
 }

@@ -4,3 +4,4 @@ aivision_cam.egg-info/
 bin/
 obj/
 *.data
+object-detection/

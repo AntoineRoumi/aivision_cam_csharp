@@ -1,10 +1,8 @@
 # AI Vision Depth Camera library wrapper for C#
 
-## Installation 
+## Build 
 
-First of all, you need to run the following command to install the Python module :
-
-```pip install -e aivision_cam```
+To setup all the dependencies, simply run the `setup.sh`. It will download the [Python package](https://github.com/AntoineRoumi/object-detection), install it with pip and copy the training dataset for color recognition in the current directory. It will also install Python.NET for C#.
 
 Then, you can build the project using .NET :
 
@@ -27,7 +25,3 @@ using Python.Runtime;
   depthFinder.Update(Py.kw(key1, value1, key2, value2, ...);
 ...
 ```
-
-You will maybe need to install the Python.NET library, if so use the following command:
-
-```dotnet add package pythonnet --version 3.0.3```
