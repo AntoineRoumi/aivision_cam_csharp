@@ -191,7 +191,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_name_and_color(className, color);
-            if (obj == null)
+            if (obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -205,7 +205,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_id_and_color(id, color);
-            if (obj == null)
+            if (obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -219,7 +219,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_name(className);
-            if (obj == null)
+            if (obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -233,7 +233,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_id(id);
-            if (obj == null)
+            if (obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -257,5 +257,21 @@ class DepthFinder
     public string GetColorOfBoxXYXY(int x0, int y0, int x1, int y1)
     {
         return GetColorOfBox(new BoundingBox(x0, y0, x1, y1));
+    }
+
+    // THIS METHOD IS EXTREMELY SLOW (> 30ms due to type conversion), USE IT CAREFULLY
+    public int[][]? GetEdgesOfObject(int index)
+    {
+        try {
+            PyObject obj = DepthFinderInstance.get_edges_of_object(index);
+            if (obj.IsNone()) {
+                return null;
+            }
+            PyList outerList = new PyList(obj);
+            return outerList.As<int[][]>();
+        } catch (PythonException e) {
+            Console.WriteLine("Error in GetEdgesOfObject: {0}", e.Message);
+            return null;
+        }
     }
 }
