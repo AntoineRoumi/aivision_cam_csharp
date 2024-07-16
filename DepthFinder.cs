@@ -1,5 +1,17 @@
 using Python.Runtime;
 
+class Size
+{
+    public float Width { get; }
+    public float Height { get; }
+
+    public Size(float width, float height)
+    {
+        Width = width;
+        Height = height;
+    }
+}
+
 class Coords3D 
 {
     public float X { get; }
@@ -191,7 +203,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_name_and_color(className, color);
-            if (obj.IsNone())
+            if (obj == null || obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -205,7 +217,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_id_and_color(id, color);
-            if (obj.IsNone())
+            if (obj == null || obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -219,7 +231,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_name(className);
-            if (obj.IsNone())
+            if (obj == null || obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -233,7 +245,7 @@ class DepthFinder
     {
         try {
             PyObject? obj = DepthFinderInstance.find_object_by_id(id);
-            if (obj.IsNone())
+            if (obj == null || obj.IsNone())
                 return null;
             PyTuple coords = PyTuple.AsTuple(obj);
             return new Coords3D(coords.GetItem(0).As<float>(), coords.GetItem(1).As<float>(), coords.GetItem(2).As<float>());
@@ -264,13 +276,28 @@ class DepthFinder
     {
         try {
             PyObject obj = DepthFinderInstance.get_edges_of_object(index);
-            if (obj.IsNone()) {
+            if (obj == null || obj.IsNone()) {
                 return null;
             }
             PyList outerList = new PyList(obj);
             return outerList.As<int[][]>();
         } catch (PythonException e) {
             Console.WriteLine("Error in GetEdgesOfObject: {0}", e.Message);
+            return null;
+        }
+    }
+
+    public Size? GetSizeOfObject(int index)
+    {
+        try {
+            PyObject obj = DepthFinderInstance.get_size_of_object(index);
+            if (obj == null || obj.IsNone()) {
+                return null;
+            }
+            PyTuple size = new PyTuple(obj);
+            return new Size(size[0].As<float>(), size[1].As<float>());
+        } catch (PythonException e) {
+            Console.WriteLine("Error in GetSizeOfObject: {0}", e.Message);
             return null;
         }
     }

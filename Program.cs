@@ -10,6 +10,7 @@ class Program
             List<Result> results = depthFinder.GetVisibleObjects();
             if (results.Count > 0) {
                 Console.WriteLine("-> {0}", results[0].ClassName);
+                Console.WriteLine(depthFinder.GetSizeOfObject(0)?.Width);
             }
             watch.Stop();
             Console.WriteLine("Time elapsed this frame: {0}ms", watch.ElapsedMilliseconds);
