@@ -76,6 +76,7 @@ class DepthFinder
         Weights = weights;
         InitPython();
         InitObject();
+        Console.WriteLine(this);
     }
 
     public List<Result> GetVisibleObjects()
@@ -299,6 +300,20 @@ class DepthFinder
         } catch (PythonException e) {
             Console.WriteLine("Error in GetSizeOfObject: {0}", e.Message);
             return null;
+        }
+    }
+
+    public string ToJson()
+    {
+        try {
+            PyObject obj = DepthFinderInstance.to_json();
+            if (obj == null || obj.IsNone()) {
+                return "[]";
+            }
+            return obj.As<string>();
+        } catch (PythonException e) {
+            Console.WriteLine("Error in ToJson: {0}", e.Message);
+            return "[]";
         }
     }
 }
