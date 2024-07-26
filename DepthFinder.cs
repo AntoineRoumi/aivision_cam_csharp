@@ -79,6 +79,15 @@ class DepthFinder
         Console.WriteLine(this);
     }
 
+    public void SetCenterModeFromDim(int dim)
+    {
+        try {
+            DepthFinderInstance.set_center_mode_from_dim(dim);
+        } catch (PythonException e) {
+            Console.WriteLine("Error in SetCenterModeFromDim: {0}", e.Message);
+        }
+    }
+
     public List<Result> GetVisibleObjects()
     {
         try {
